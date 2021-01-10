@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link href="main.css" rel="stylesheet">
+    <title>Project 1</title>
+    <script>
+		
+		// return code values from requests
+		const ISFINISHED = 4;
+		const ISOK = 200;
+
+		//global variables
+		var yearVar;
+		var monthVar;
+		var dayVar;
+		var gameNumber=0;
+		var gameLength;
+
+		var alphaNums = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
+		// for test purposes, we need a global variable to indicate the current set of allowable characters or numbers
+		var filterSet = "";
+
+		// AJAX asynchronous XMLHttpRequest to get the JSON from the site defined by url and using the callback function callback (alias for myCallBack)
+		function getJSONAsync(url) {
+			var request = new XMLHttpRequest();
+			request.onreadystatechange = function () {
+				if (request.readyState === ISFINISHED && request.status === ISOK) {
+					// display all the data
+					//document.getElementById("txtHomeName").innerHTML = request.responseText;
+
+					// finally convert the returned data to a JavaScript object, use the Chrome debugger to inspect this variable
+					var jsObject = JSON.parse(request.responseText);
+
+				  	// here's some sample data from within the jsObject object
+				  	//gameNumber should be initialize to zero, and then increments and decrements by clicking the previous and next buttons
+
+					var hTn = jsObject.data.games.game[gameNumber].home_team_name;
+					var aTn = jsObject.data.games.game[gameNumber].away_team_name;
+					var wpf = jsObject.data.games.game[gameNumber].winning_pitcher.first;
+					var wpl = jsObject.data.games.game[gameNumber].winning_pitcher.last;
+					var lpf = jsObject.data.games.game[gameNumber].losing_pitcher.first;
+					var lpl = jsObject.data.games.game[gameNumber].losing_pitcher.last;
+					var ven = jsObject.data.games.game[gameNumber].venue;
+
+					//get the length of the object "game" using the .length and store it in gameLength variable
+					gameLength=jsObject.data.games.game.length;
+
+					//store values in the textboxes using the data variables(from jsObject object) 
+ 				 	document.getElementById("txtHomeName").value = hTn;
+ 				 	document.getElementById("txtAwayName").value = aTn;
+ 				 	document.getElementById("txtVenue").value = ven;
+ 				 	document.getElementById("txtWinPitcher").value = wpf+" "+wpl;
+ 				 	document.getElementById("txtLosePitcher").value = lpf+" "+lpl;
+
+					// convert the jsObject object back into a different json string
+					var newJSON = JSON.stringify(jsObject);
+				}//end of IF REQUEST
+
+
+			};
+			// open a connection using the URL
+			request.open("GET", url);
+			// send the GET request
+			request.send();
+	}
+
+	/*store in the variables whatever year, month, and date that has been click*/
+		function selectYear(){
+ 		   yearVar = document.getElementById('year').value;
+		}
+		function selectMonth(){
+ 		   monthVar = document.getElementById('month').value;
+		}
+		function selectDay(){
+ 		   dayVar = document.getElementById('day').value;
+		}
+		// onload event handler creates the URL
+		// for a given year month and day
+		function getBaseballDataAsynch() {
+			// build a URL as required by the MLB site
+			var tempURL = "http://gd2.mlb.com/components/game/mlb/year_" + yearVar + "/month_" + monthVar + "/day_" + dayVar + "/master_scoreboard.json";
+			
+			// get the data for the specified date with an asynchronous call
+			// the result will be seen above in the callBack function
+			getJSONAsync(tempURL);
+		}
+
+		// filter the currently entered character to see that it is part of the acceptable character set
+		function nCharOK(c) {
+			var ch = (String.fromCharCode(c));
+			ch = ch.toUpperCase();
+
+			// if the current character is not found in the set of all numbers, set the flag variable to fail
+			if (filterSet.indexOf(ch) !== -1) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+	//if the Previous Game button is click, 
+	//it checks if the game Number is greater than zero, the game Number will decrement otherwise, "no previous game read"
+	//after that it calls getBaseballDataAsynch(URL) again and look for the data it needs
+		function clickPrevGame(){
+			
+			if (gameNumber>0){
+				gameNumber--;
+				//alert("Game # "+gameNumber);
+			}
+			else{
+				alert("No previous game!")
+			}
+			getBaseballDataAsynch(URL);
+		}
+		//if the New Game button is click, 
+	//it checks if the game Number is greater than length of the game,"that's the end of game" otherwise, the game Number will increment 
+	//after that it calls getBaseballDataAsynch(URL) again and look for the data it needs
+		function clickNewGame(){
+
+			document.getElementById("prevG").disabled = false;
+			
+			if (gameNumber>gameLength){
+				alert("That's the end of the game!")
+			}
+			else{
+				gameNumber++;
+			//alert("Game # "+gameNumber);
+			}
+			getBaseballDataAsynch(URL);
+		}
+		function clickSaveGame(){
+			alert("Changes saved!");
+		}
+		function StartMeUp(){
+			document.getElementById("prevG").disabled = true;
+		}
+		// Cross browser code to filter data entry on numeric fields
+		// (not including Firefox)
+		function filterText(ref) {
+			// choose the value of filterSet based
+			// on the text box that sent the character
+			if (ref.id === "txtHomeName"||ref.id === "txtAwayName"||ref.id === "txtWinPitcher"||ref.id === "txtLosePitcher"||ref.id === "txtVenue") {
+				filterSet = alphaNums;
+			}	
+			// Chrome, Edge and Safari use returnValue
+			if (window.event.keyCode === 13) {
+				alert("You pressed the enter key");
+			}
+			else if (!nCharOK(window.event.keyCode)) {
+				window.event.returnValue = null;
+			}
+		}
+
+	</script>
+</head>
+<body onload="StartMeUp()">
+<header>
+	<!-- You can click the gif to reload the page -->
+<h1><img src="baseball.gif" onclick="location.reload()">Major League Baseball</h1>
+</header>	
+	<!-- Make a divs about Dates and Information Needed to seperate it -->
+<div id="wrap">
+		<br>
+		<div id="Dates">
+			<!-- If you click the dates, it will change to whatever you choose -->
+			 <div><label >Year</label>
+			   <select name="" id="year" onchange="selectYear();">
+			    <option value="2017">2017</option>
+			    <option value="2016">2016</option>
+			    <option value="2015">2015</option>
+				</select>
+			</div>
+
+		    <div><label>Month</label>
+				<select name="" id="month" onchange="selectMonth();">
+				    <option value="01">1</option>
+				    <option value="02">2</option>
+				    <option value="03">3</option>
+				    <option value="04">4</option>
+				    <option value="05">5</option>
+				    <option value="06">6</option>
+				    <option value="07">7</option>
+				    <option value="08">8</option>
+				    <option value="09">9</option>
+				    <option value="10">10</option>
+				    <option value="11">11</option>
+				    <option value="12">12</option>
+				</select>
+			</div>
+
+		    <div><label>Day</label>
+				<select name="" id="day" onchange="selectDay();">
+				    <option value="01">1</option>
+				    <option value="02">2</option>
+				    <option value="03">3</option>
+				    <option value="04">4</option>
+				    <option value="05">5</option>
+				    <option value="06">6</option>
+				    <option value="07">7</option>
+				    <option value="08">8</option>
+				    <option value="09">9</option>
+				    <option value="10">10</option>
+				    <option value="11">11</option>
+				    <option value="12">12</option>
+				    <option value="13">13</option>
+				    <option value="14">14</option>
+				    <option value="15">15</option>
+				    <option value="16">16</option>
+				    <option value="17">17</option>
+				    <option value="18">18</option>
+				    <option value="19">19</option>
+				    <option value="20">20</option>
+				    <option value="21">21</option>
+				    <option value="22">22</option>
+				    <option value="23">23</option>
+				    <option value="24">24</option>
+				    <option value="25">25</option>
+				    <option value="26">26</option>
+				    <option value="27">27</option>
+				    <option value="28">28</option>
+				    <option value="29">29</option>
+				    <option value="30">30</option>
+				    <option value="31">31</option>
+				</select>  
+			</div>
+
+		</div>	
+
+		   <br>
+		<div id="info">  
+		<!-- If the following textbox is being edited, it will only allow to accept alphaNumeric characters --> 
+		   <div><label>Home Team Name</label>
+		        <input type="text" id="txtHomeName" onkeypress="filterText(this);" maxlength="50" size="50" />
+		       
+		        </div>
+
+		   <div><label>Away Team Name</label>
+		        <input type="text" id="txtAwayName" onkeypress="filterText(this);" maxlength="50" size="50" />
+		        
+		        </div>
+
+		   <div><label>Winning Pitcher</label>
+		        <input type="text" id="txtWinPitcher" onkeypress="filterText(this);" maxlength="50" size="50" />
+		       
+		        </div>
+
+		   <div>
+		    <label>Losing Pitcher</label>
+		        <input type="text" id="txtLosePitcher" onkeypress="filterText(this);" maxlength="50" size="50" />
+		       
+		        </div>
+
+		   <div>
+		    <label>Venue</label>
+		        <input type="text" id="txtVenue" onkeypress="filterText(this);" maxlength="50" size="50" />
+		        <br /><br />
+		        </div>
+
+		</div>     
+		<div id="buttonsDiv">
+			<!-- Buttons that triggers the previous, next and save game -->
+			 	<button id="prevG" onclick="clickPrevGame()">Previous Game</button>
+		        <button id="newG" onclick="clickNewGame()">New Game</button>
+		        <button id="saveG" onclick="clickSaveGame()">Save Changes</button>
+			<input type="button" id="btnAsynch"  value="Retrieve" onclick="getBaseballDataAsynch()"/>
+		</div>      
+		      
+</div>	
+</body>
+</html>

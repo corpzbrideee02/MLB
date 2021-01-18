@@ -1,0 +1,120 @@
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+}
+.App {
+  text-align: center;
+  background-image: url(./day1.png);
+ background-repeat: no-repeat; 
+  height: 100vh;
+}
+h1{
+  font-family: 'Ranchers', cursive;
+  font-size: 100px;
+  text-shadow: 1px 2px #f3efef;
+  
+}
+h1:hover{
+  color:rgb(104, 117, 129);
+  text-shadow: 1px 2px #f3efef;
+}
+.selectDate{
+ margin:25px 0;
+
+}
+.search-form{
+  margin-bottom: 100px;
+}
+.search-bar{
+  margin:20px;
+  padding: 5px;
+
+}
+.css-2b097c-container
+{
+  display: inline-block;
+  width: 250px;
+  margin:0 15px;
+}
+
+.searchDiv{
+  display:inline-block;
+  margin: 5px 25%;
+  float: right;
+}
+.tat{
+  
+    box-shadow: 0px 5px 10px;
+    color:slategrey;
+    margin: 0 10%;
+}
+.retButton:hover{
+background-color: slategrey;
+color: white;
+}
+#helpB{
+  margin-left: 50px;
+}
+#helpB:hover{
+  width:60px
+}
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+@media screen and (max-width: 800px) {
+
+  .selectDate{ 
+  display:inline-block;
+   margin: 5% 20%;
+   }
+   h1{
+     font-size: 50px;
+   }
+   
+} 
+.gamesClass{
+  box-shadow: 0px 5px 10px;
+  color:slategrey;
+  background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+  height: 320px;
+  border-radius: 100%;
+  width: 350px;
+  padding:5px;
+  margin:10px 15px;
+  display: inline-block;
+  font-family: 'Acme', sans-serif;
+}
+h2{
+  font-family: 'Acme', sans-serif;
+}
+.gamesClass:hover{
+  background-image: linear-gradient(to top, lightgrey 0%, lightgrey 1%, #e0e0e0 26%, #efefef 48%, #d9d9d9 75%, #bcbcbc 100%);
+  width:360px;
+  height:330px;
+}
+.gamesClass:hover{
+  color: #000;
+}
+
+button{
+  color: #282c34;
+  font-size:larger;
+  padding:5px 10px;
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px;
+}
+h4{
+  margin: 15px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Ranchers&family=Ribeye&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Fredoka+One&family=Play:wght@700&family=Righteous&display=swap');
+

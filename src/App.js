@@ -7,6 +7,7 @@ import yearsJS from './years'
 import DarkTheme from 'react-dark-theme';
 import Ripples from 'react-ripples'
 import helpButton from './help1.png'
+import axios from "axios";
 
 //for toggle Theme
 const lightTheme = {
@@ -58,12 +59,26 @@ const App=()=>{
 //retrieve Data
  const HandleRetrieveClick=async()=>
  {
-    const response= await fetch(
-      `http://gd2.mlb.com/components/game/mlb/year_${selectedYear.value}/month_${selectedMonth.value<10?'0'+selectedMonth.value:selectedMonth.value}/day_${selectedDay.value<10?'0'+selectedDay.value:selectedDay.value}/master_scoreboard.json`
-    )
-    const dataG=await response.json();
+    //const response= `http://gd2.mlb.com/components/game/mlb/year_${selectedYear.value}/month_${selectedMonth.value<10?'0'+selectedMonth.value:selectedMonth.value}/day_${selectedDay.value<10?'0'+selectedDay.value:selectedDay.value}/master_scoreboard.json`
+    
+    //const dataG=await response.json();
     //if there is a game on that date then retrieve, if not, alert
-      (dataG.data.games.game) ?setGames(dataG.data.games.game):alert("Oooops! No game on that day");
+    //  (dataG.data.games.game) ?setGames(dataG.data.games.game):alert("Oooops! No game on that day");
+    const game_type='L';
+    const dataG=`/json/named.org_game_type_date_info.bam?current_sw='Y'&sport_code='mlb'game_type='L'&season='${selectedYear.value}'`;
+
+    const start_date='20171201';
+    const end_date='20171231';
+
+    //const dataG=`/json/named.transaction_all.bam?sport_code='mlb'&start_date=${start_date}&end_date=${end_date}`
+    //const dataG=`/components/game/mlb/year_${selectedYear.value}/month_${selectedMonth.value<10?'0'+selectedMonth.value:selectedMonth.value}/day_${selectedDay.value<10?'0'+selectedDay.value:selectedDay.value}/master_scoreboard.json`
+    
+
+    axios.get(dataG).then((r) => {
+      //const dataG= r.json();
+      //(dataG.data.games.game) ?setGames(dataG.data.games.game):alert("Oooops! No game on that day");
+      console.log(r)
+         });
  }; 
 
   return (

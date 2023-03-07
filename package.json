@@ -6,7 +6,9 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.0",
+    "axios": "^1.1.3",
     "bootstrap": "^4.5.3",
+    "cors": "^2.8.5",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
     "react-button": "^1.2.1",
@@ -21,6 +23,7 @@
     "semantic-ui-react": "^2.0.2",
     "web-vitals": "^0.2.4"
   },
+  "proxy":  "http://lookup-service-prod.mlb.com",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
